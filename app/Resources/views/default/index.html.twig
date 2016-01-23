@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="jumbotron">
+                <p>Crea un nuevo usuario</p>
+                <p>
+                    <a class="btn btn-default btn-lg" href="{{ path('user_new') }}">
+                        <i class="fa fa-user"></i>
+                        Registrate
+                    </a>
+                </p>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="jumbotron">
+                <p>Login</p>
+
+                <p>
+                    <a class="btn btn-primary btn-lg" href="{{ path('security_login_form') }}">
+                        <i class="fa fa-check"> Login</i>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Comunidad</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ comunidad.id }}</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>{{ comunidad.nombre }}</td>
+            </tr>
+            <tr>
+                <th>Privada</th>
+                <td>{% if comunidad.privada %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Password</th>
+                <td>{{ comunidad.password }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('comunidad_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('comunidad_edit', { 'id': comunidad.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

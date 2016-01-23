@@ -1,0 +1,24 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+    app.twig.locale_extension:
+            public:    false
+            class:     AppBundle\Twig\LocaleExtension
+            arguments: ["%app_locales%"]
+            tags:
+                - { name: twig.extension }
+
+    app.comunidad.provider:
+       class: AppBundle\Services\ComunidadProvider
+       arguments: ["@session"]
+
+    app.equipo.factory:
+        class: AppBundle\Factory\EquipoFactory
+        arguments: ["@app.comunidad.provider"]
+
+    app.partido.factory:
+        class: AppBundle\Factory\PartidoFactory
+        arguments: ["@app.equipo.factory", "@app.comunidad.provider"]

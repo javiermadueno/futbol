@@ -14,7 +14,7 @@ Para instalar la aplicación:
 
     ```bash
     $ composer update
-    ``
+    ```
 3. Cargar los fixtures
 
     ```bash

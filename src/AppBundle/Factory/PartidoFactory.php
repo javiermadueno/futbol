@@ -41,6 +41,7 @@ class PartidoFactory
                     ->equipoFactory
                     ->createEquipoRojoFor($partido)
             )
+            ->setJugado(false)
         ;
 
         return $partido;

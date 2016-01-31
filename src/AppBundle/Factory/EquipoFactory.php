@@ -11,9 +11,12 @@ class EquipoFactory
 {
     private $comunidadProvider;
 
-    public function __construct(ComunidadProvider $comunidadProvider)
+    private $jugadoresFactory;
+
+    public function __construct(ComunidadProvider $comunidadProvider, JugadoresFactory $jugadoresFactory)
     {
         $this->comunidadProvider = $comunidadProvider;
+        $this->jugadoresFactory = $jugadoresFactory;
     }
 
     /**
@@ -35,6 +38,8 @@ class EquipoFactory
             )
             ->setPartido($partido)
         ;
+
+        $this->jugadoresFactory->createForEquipo($equipo);
 
         return $equipo;
     }

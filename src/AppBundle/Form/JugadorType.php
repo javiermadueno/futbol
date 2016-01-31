@@ -6,8 +6,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use AppBundle\Entity\Usuario;
 
-class PartidoType extends AbstractType
+class JugadorType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
@@ -16,10 +17,9 @@ class PartidoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('fecha', 'datetime')
-            ->add('equipoBlanco', EquipoType::class, [
-            ])
-            ->add('equipoRojo', EquipoType::class, [
+            ->add('usuario', EntityType::class, [
+                'class' => Usuario::class,
+                'choice_label' => 'username'
             ])
         ;
     }
@@ -30,7 +30,7 @@ class PartidoType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Partido'
+            'data_class' => 'AppBundle\Entity\Jugador'
         ));
     }
 }

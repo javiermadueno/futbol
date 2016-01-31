@@ -152,12 +152,13 @@ class Comunidad
     /**
      * Add usuarios
      *
-     * @param \AppBundle\Entity\Usuario $usuarios
+     * @param Usuario $usuarios
      * @return Comunidad
      */
-    public function addUsuario(\AppBundle\Entity\Usuario $usuarios)
+    public function addUsuario(Usuario $usuarios)
     {
         $this->usuarios[] = $usuarios;
+        $usuarios->addComunidad($this);
 
         return $this;
     }

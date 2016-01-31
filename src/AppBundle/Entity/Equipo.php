@@ -6,6 +6,7 @@ use AppBundle\Entity\Traits\ActiveTrait;
 use AppBundle\Entity\Traits\ComunidadTrait;
 use AppBundle\Entity\Traits\TimeStampableTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Equipo
@@ -15,6 +16,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Equipo
 {
+    /**
+     * Numero maximo de jugadores por equipo
+     */
+    const MAX_JUGADORES = 7;
+
     use ActiveTrait;
     use TimeStampableTrait;
     use ComunidadTrait;
@@ -49,15 +55,15 @@ class Equipo
     /**
      * @var Partido
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Partido")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Partido", inversedBy="equipos")
      * @ORM\JoinColumn(name="id_partido", referencedColumnName="id")
      */
     private $partido;
 
     /**
-     * @var Collection
+     * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Jugador", mappedBy="equipo")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Jugador", mappedBy="equipo", cascade={"persist"})
      */
     private $jugadores;
 
@@ -171,6 +177,8 @@ class Equipo
      */
     public function addJugador(Jugador $jugador)
     {
+        $jugador->setEquipo($this);
+
         $this->jugadores[] = $jugador;
 
         return $this;
@@ -181,7 +189,7 @@ class Equipo
      *
      * @param \AppBundle\Entity\Jugador $jugador
      */
-    public function removeJugadore(Jugador $jugador)
+    public function removeJugador(Jugador $jugador)
     {
         $this->jugadores->removeElement($jugador);
     }
@@ -196,17 +204,5 @@ class Equipo
         return $this->jugadores;
     }
 
-    /**
-     * Add jugadores
-     *
-     * @param \AppBundle\Entity\Jugador $jugadores
-     *
-     * @return Equipo
-     */
-    public function addJugadore(\AppBundle\Entity\Jugador $jugadores)
-    {
-        $this->jugadores[] = $jugadores;
 
-        return $this;
-    }
 }

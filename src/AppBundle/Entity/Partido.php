@@ -37,7 +37,7 @@ class Partido
     /**
      * @var string
      *
-     * @ORM\Column(name="jornada", type="string", length=255)
+     * @ORM\Column(name="jornada", type="string", length=255, nullable=true)
      */
     private $jornada;
 
@@ -46,42 +46,42 @@ class Partido
      *
      * @ORM\Column(type="boolean")
      */
-    private $jugado;
+    private $jugado = false;
 
     /**
      * @var bool
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private $ganadorRojo;
+    private $ganadorRojo = false;
 
     /**
      * @var bool
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private $ganadorBlanco;
+    private $ganadorBlanco = false;
 
     /**
      * @var bool
      *
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    private $empate;
+    private $empate = false;
 
     /**
      * @var int
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $golesRojo;
+    private $golesRojo = 0;
 
     /**
      * @var int
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
-    private $golesBlanco;
+    private $golesBlanco = 0;
 
 
     /**
@@ -94,7 +94,7 @@ class Partido
     /**
      * @var Equipo
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Equipo")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Equipo", cascade={"persist"})
      * @ORM\JoinColumn(name="equipo_blanco", referencedColumnName="id")
      */
     private $equipoBlanco;
@@ -102,7 +102,7 @@ class Partido
     /**
      * @var Equipo
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Equipo")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Equipo", cascade={"persist"})
      * @ORM\JoinColumn(name="equipo_rojo", referencedColumnName="id")
      */
     private $equipoRojo;

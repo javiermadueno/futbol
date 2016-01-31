@@ -2,13 +2,15 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use AppBundle\Entity\Comunidad;
+use AppBundle\Form\ComunidadType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use AppBundle\Entity\Comunidad;
-use AppBundle\Form\ComunidadType;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Comunidad controller.
@@ -18,21 +20,18 @@ use AppBundle\Form\ComunidadType;
  */
 class ComunidadController extends Controller
 {
+
     /**
-     * Lists all Comunidad entities.
-     *
-     * @Route("/", name="comunidad_index")
-     * @Method("GET")
+     * @Route(path="/", name="comunidad_index")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
+        $usuario = $this->getUser();
+        $comunidades = $usuario->getComunidades();
 
-        $comunidads = $this->getUser()->getComunidades()->toArray();
-
-        return $this->render('comunidad/index.html.twig', array(
-            'comunidads' => $comunidads,
-        ));
+        return $this->render('comunidad/index.html.twig', [
+            'comunidads' => $comunidades
+        ]);
     }
 
     /**
@@ -53,13 +52,57 @@ class ComunidadController extends Controller
             $em->persist($comunidad);
             $em->flush();
 
-            return $this->redirectToRoute('comunidad_show', array('id' => $comunidad->getId()));
+            return $this->redirectToRoute('comunidad_show', ['id' => $comunidad->getId()]);
         }
 
-        return $this->render('comunidad/new.html.twig', array(
+        return $this->render('comunidad/new.html.twig', [
             'comunidad' => $comunidad,
-            'form' => $form->createView(),
-        ));
+            'form'      => $form->createView(),
+        ]);
+    }
+
+    /**
+     * Asocia un usuario con una Comunidad
+     *
+     * @Route(path="/{id}/join", name="comunidad_join")
+     */
+    public function joinAction(Request $request, Comunidad $comunidad)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $usuario = $this->getUser();
+
+        //Crear un formulario para enviar por Post los datos
+
+        $comunidad->addUsuario($usuario);
+
+        $em->persist($comunidad);
+        $em->flush();
+
+        return $this->redirectToRoute('comunidad_show', [
+            'id' => $comunidad->getId()
+        ]);
+
+    }
+
+
+    /**
+     * Guarda en session la comunidad seleccionada por el usuario
+     *
+     * @Route(path="/{id}/select", name="comunidad_select")
+     */
+    public function selectAction(Request $request, Comunidad $comunidad)
+    {
+        $usuario = $this->getUser();
+
+        if ($usuario->getComunidades()->contains($comunidad)) {
+            $this->get('app.comunidad.provider')->set($comunidad);
+        }
+
+        if($request->attributes->has('return_url')){
+            return new RedirectResponse($request->attributes->get('return_url'), Response::HTTP_FOUND);
+        }
+
+        return $this->redirectToRoute('comunidad_index');
     }
 
     /**
@@ -72,10 +115,12 @@ class ComunidadController extends Controller
     {
         $deleteForm = $this->createDeleteForm($comunidad);
 
-        return $this->render('comunidad/show.html.twig', array(
-            'comunidad' => $comunidad,
+        $this->get('app.comunidad.provider')->set($comunidad);
+
+        return $this->render('comunidad/show.html.twig', [
+            'comunidad'   => $comunidad,
             'delete_form' => $deleteForm->createView(),
-        ));
+        ]);
     }
 
     /**
@@ -95,14 +140,14 @@ class ComunidadController extends Controller
             $em->persist($comunidad);
             $em->flush();
 
-            return $this->redirectToRoute('comunidad_edit', array('id' => $comunidad->getId()));
+            return $this->redirectToRoute('comunidad_edit', ['id' => $comunidad->getId()]);
         }
 
-        return $this->render('comunidad/edit.html.twig', array(
-            'comunidad' => $comunidad,
-            'edit_form' => $editForm->createView(),
+        return $this->render('comunidad/edit.html.twig', [
+            'comunidad'   => $comunidad,
+            'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-        ));
+        ]);
     }
 
     /**
@@ -135,9 +180,8 @@ class ComunidadController extends Controller
     private function createDeleteForm(Comunidad $comunidad)
     {
         return $this->createFormBuilder()
-            ->setAction($this->generateUrl('comunidad_delete', array('id' => $comunidad->getId())))
+            ->setAction($this->generateUrl('comunidad_delete', ['id' => $comunidad->getId()]))
             ->setMethod('DELETE')
-            ->getForm()
-        ;
+            ->getForm();
     }
 }

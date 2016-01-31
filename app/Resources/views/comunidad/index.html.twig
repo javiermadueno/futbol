@@ -16,7 +16,7 @@
         <tbody>
         {% for comunidad in comunidads %}
             <tr>
-                <td><a href="{{ path('comunidad_show', { 'id': comunidad.id }) }}">{{ comunidad.id }}</a></td>
+                <td><a href="{{ path('comunidad_select', { 'id': comunidad.id }) }}">{{ comunidad.id }}</a></td>
                 <td>{{ comunidad.nombre }}</td>
                 <td>{% if comunidad.privada %}Yes{% else %}No{% endif %}</td>
                 <td>{{ comunidad.password }}</td>

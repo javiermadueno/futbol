@@ -19,22 +19,6 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 class UsuarioController extends Controller
 {
-    /**
-     * Lists all Usuario entities.
-     *
-     * @Route("/", name="user_index")
-     * @Method("GET")
-     */
-    public function indexAction()
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $usuarios = $em->getRepository('AppBundle:Usuario')->findAll();
-
-        return $this->render('usuario/index.html.twig', array(
-            'usuarios' => $usuarios,
-        ));
-    }
 
     /**
      * Creates a new Usuario entity.

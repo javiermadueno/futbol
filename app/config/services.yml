@@ -5,20 +5,34 @@ parameters:
 
 services:
     app.twig.locale_extension:
-            public:    false
-            class:     AppBundle\Twig\LocaleExtension
-            arguments: ["%app_locales%"]
-            tags:
-                - { name: twig.extension }
+        public:    false
+        class:     AppBundle\Twig\LocaleExtension
+        arguments: ["%app_locales%"]
+        tags:
+            - { name: twig.extension }
 
     app.comunidad.provider:
        class: AppBundle\Services\ComunidadProvider
-       arguments: ["@session"]
+       arguments: [@session, @doctrine.orm.default_entity_manager]
+
+    app.jugadores.factory:
+        class: AppBundle\Factory\JugadoresFactory
+        autowire: true
 
     app.equipo.factory:
         class: AppBundle\Factory\EquipoFactory
-        arguments: ["@app.comunidad.provider"]
+        autowire: true
 
     app.partido.factory:
         class: AppBundle\Factory\PartidoFactory
-        arguments: ["@app.equipo.factory", "@app.comunidad.provider"]
+        autowire: true
+
+    app.comunidad.listener:
+        class: AppBundle\Listener\ComunidadListener
+        arguments: [@security.token_storage, @app.comunidad.provider, @controller_resolver, @logger]
+        tags:
+            - { name: 'kernel.event_listener', event: 'kernel.controller', method: 'onKernelController' }
+
+
+
+

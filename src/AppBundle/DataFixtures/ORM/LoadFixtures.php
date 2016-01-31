@@ -19,7 +19,6 @@ class LoadFixtures implements FixtureInterface, ContainerAwareInterface
     public function load(ObjectManager $manager)
     {
         $this->loadPosiciones($manager);
-        $this->loadEquipos($manager);
     }
 
     private function loadPosiciones(ObjectManager $manager)

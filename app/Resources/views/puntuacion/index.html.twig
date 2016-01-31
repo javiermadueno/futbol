@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Puntuacion list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Goles</th>
+                <th>Partidoganado</th>
+                <th>Partidoperdido</th>
+                <th>Partidoempatado</th>
+                <th>Valoracion</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for puntuacion in puntuacions %}
+            <tr>
+                <td><a href="{{ path('partido_puntuacion_show', { 'id': puntuacion.id }) }}">{{ puntuacion.id }}</a></td>
+                <td>{{ puntuacion.goles }}</td>
+                <td>{% if puntuacion.partidoGanado %}Yes{% else %}No{% endif %}</td>
+                <td>{% if puntuacion.partidoPerdido %}Yes{% else %}No{% endif %}</td>
+                <td>{% if puntuacion.partidoEmpatado %}Yes{% else %}No{% endif %}</td>
+                <td>{{ puntuacion.valoracion }}</td>
+                <td>{% if puntuacion.createdAt %}{{ puntuacion.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if puntuacion.updatedAt %}{{ puntuacion.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('partido_puntuacion_show', { 'id': puntuacion.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('partido_puntuacion_edit', { 'id': puntuacion.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('partido_puntuacion_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

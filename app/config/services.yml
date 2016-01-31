@@ -33,6 +33,12 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.controller', method: 'onKernelController' }
 
+    app.form.jugador:
+        class: AppBundle\Form\JugadorType
+        autowire: true
+        tags:
+            - { name: form.type }
+
 
 
 

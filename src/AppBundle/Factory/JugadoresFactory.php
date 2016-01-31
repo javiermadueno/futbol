@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: javi
- * Date: 31/1/16
- * Time: 12:19
- */
 
 namespace AppBundle\Factory;
 
@@ -33,7 +27,6 @@ class JugadoresFactory
                     $this->comunidadProvider->get()
                 );
             $equipo->addJugador($jugador);
-
 
             $i++;
         }

@@ -47,7 +47,9 @@ class ComunidadListener
 
     public function onKernelController(FilterControllerEvent $event)
     {
-        if (!$event->isMasterRequest() || $event->getRequest()->attributes->get('_route') == 'comunidad_select') {
+        $route = $event->getRequest()->attributes->get('_route');
+
+        if (!$event->isMasterRequest() ||  in_array($route, ['comunidad_select', 'comunidad_new']) ) {
             return;
         }
 

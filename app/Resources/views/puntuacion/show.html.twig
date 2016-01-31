@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Puntuacion</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ puntuacion.id }}</td>
+            </tr>
+            <tr>
+                <th>Goles</th>
+                <td>{{ puntuacion.goles }}</td>
+            </tr>
+            <tr>
+                <th>Partidoganado</th>
+                <td>{% if puntuacion.partidoGanado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Partidoperdido</th>
+                <td>{% if puntuacion.partidoPerdido %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Partidoempatado</th>
+                <td>{% if puntuacion.partidoEmpatado %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Valoracion</th>
+                <td>{{ puntuacion.valoracion }}</td>
+            </tr>
+            <tr>
+                <th>Createdat</th>
+                <td>{% if puntuacion.createdAt %}{{ puntuacion.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Updatedat</th>
+                <td>{% if puntuacion.updatedAt %}{{ puntuacion.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('partido_puntuacion_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('partido_puntuacion_edit', { 'id': puntuacion.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

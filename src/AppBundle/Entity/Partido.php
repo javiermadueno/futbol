@@ -94,16 +94,16 @@ class Partido
     /**
      * @var Equipo
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Equipo", cascade={"persist"})
-     * @ORM\JoinColumn(name="equipo_blanco", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Equipo", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="equipo_blanco", referencedColumnName="id", onDelete="CASCADE")
      */
     private $equipoBlanco;
 
     /**
      * @var Equipo
      *
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Equipo", cascade={"persist"})
-     * @ORM\JoinColumn(name="equipo_rojo", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Equipo", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="equipo_rojo", referencedColumnName="id", onDelete="CASCADE")
      */
     private $equipoRojo;
 

@@ -46,7 +46,7 @@ class Jugador
      * @var Equipo
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Equipo", inversedBy="jugadores")
-     * @ORM\JoinColumn(name="id_equipo", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_equipo", referencedColumnName="id", onDelete="CASCADE")
      */
     private $equipo;
 
@@ -54,7 +54,7 @@ class Jugador
      * @var Partido
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Partido")
-     * @ORM\JoinColumn(name="id_partido", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_partido", referencedColumnName="id", onDelete="CASCADE")
      */
     private $partido;
 
@@ -140,9 +140,13 @@ class Jugador
     /**
      * @param Equipo $equipo
      */
-    public function setEquipo($equipo)
+    public function setEquipo(Equipo $equipo)
     {
         $this->equipo = $equipo;
+
+        if($equipo->getPartido() instanceof Partido) {
+            $this->setPartido($equipo->getPartido());
+        }
     }
 
     /**

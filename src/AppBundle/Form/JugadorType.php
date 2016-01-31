@@ -2,6 +2,10 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Repository\UsuarioRepository;
+use AppBundle\Services\ComunidadProvider;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -11,15 +15,33 @@ use AppBundle\Entity\Usuario;
 class JugadorType extends AbstractType
 {
     /**
+     * JugadorType constructor.
+     */
+    public function __construct(ComunidadProvider $comunidadProvider)
+    {
+        $this->comunidadProvider = $comunidadProvider;
+    }
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $comunidad = $this->comunidadProvider->get();
+
         $builder
             ->add('usuario', EntityType::class, [
                 'class' => Usuario::class,
-                'choice_label' => 'username'
+                'choice_label' => 'username',
+                'query_builder' => function(UsuarioRepository $er) use ($comunidad) {
+                    return $er
+                        ->createQueryBuilder('u')
+                        ->join('u.comunidades', 'comunidad')
+                        ->where('comunidad.id = :comunidad')
+                        ->setParameter('comunidad', $comunidad->getId())
+                        ;
+                }
             ])
         ;
     }
@@ -33,4 +55,5 @@ class JugadorType extends AbstractType
             'data_class' => 'AppBundle\Entity\Jugador'
         ));
     }
+
 }

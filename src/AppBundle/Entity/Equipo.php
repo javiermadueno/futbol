@@ -56,7 +56,7 @@ class Equipo
      * @var Partido
      *
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Partido", inversedBy="equipos")
-     * @ORM\JoinColumn(name="id_partido", referencedColumnName="id")
+     * @ORM\JoinColumn(name="id_partido", referencedColumnName="id", onDelete="CASCADE")
      */
     private $partido;
 

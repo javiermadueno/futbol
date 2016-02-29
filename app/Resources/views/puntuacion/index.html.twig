@@ -20,7 +20,7 @@
         <tbody>
         {% for puntuacion in puntuacions %}
             <tr>
-                <td><a href="{{ path('partido_puntuacion_show', { 'id': puntuacion.id }) }}">{{ puntuacion.id }}</a></td>
+                <td><a href="{{ path('partido_puntuacion_show', { 'id': partido.id, 'id_puntuacion': puntuacion.id }) }}">{{ puntuacion.id }}</a></td>
                 <td>{{ puntuacion.goles }}</td>
                 <td>{% if puntuacion.partidoGanado %}Yes{% else %}No{% endif %}</td>
                 <td>{% if puntuacion.partidoPerdido %}Yes{% else %}No{% endif %}</td>
@@ -31,10 +31,10 @@
                 <td>
                     <ul>
                         <li>
-                            <a href="{{ path('partido_puntuacion_show', { 'id': puntuacion.id }) }}">show</a>
+                            <a href="{{ path('partido_puntuacion_show', { 'id': partido.id, 'id_puntuacion': puntuacion.id }) }}">show</a>
                         </li>
                         <li>
-                            <a href="{{ path('partido_puntuacion_edit', { 'id': puntuacion.id }) }}">edit</a>
+                            <a href="{{ path('partido_puntuacion_edit', { 'id': partido.id, 'id_puntuacion': puntuacion.id }) }}">edit</a>
                         </li>
                     </ul>
                 </td>
@@ -45,7 +45,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('partido_puntuacion_new') }}">Create a new entry</a>
+            <a href="{{ path('partido_puntuacion_new', {'id': partido.id }) }}">Create a new entry</a>
         </li>
     </ul>
 {% endblock %}

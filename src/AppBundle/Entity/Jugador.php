@@ -4,12 +4,13 @@ namespace AppBundle\Entity;
 
 use AppBundle\Entity\Traits\ComunidadTrait;
 use AppBundle\Entity\Traits\TimeStampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Jugador
  *
- * @ORM\Table(name="jugador", uniqueConstraints={@ORM\UniqueConstraint(name="jugador", columns={"id_partido", "id_usuario"})})
+ * @ORM\Table(name="jugador", uniqueConstraints={@ORM\UniqueConstraint(name="jugador_partido", columns={"id_partido","id_usuario"})})
  * @ORM\Entity(repositoryClass="AppBundle\Repository\JugadorRepository")
  */
 class Jugador
@@ -59,9 +60,9 @@ class Jugador
     private $partido;
 
     /**
-     * @var int
+     * @var ArrayCollection
      *
-     * @ORM\Column(name="goles", type="integer", nullable=true)
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Gol", mappedBy="jugador", cascade={"remove", "persist"})
      */
     private $goles;
 
@@ -73,10 +74,16 @@ class Jugador
     private $asistencias;
 
 
+    public function __construct()
+    {
+        $this->goles = new ArrayCollection();
+    }
+
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -87,6 +94,7 @@ class Jugador
      * Set usuario
      *
      * @param string $usuario
+     *
      * @return Jugador
      */
     public function setUsuario($usuario)
@@ -99,7 +107,7 @@ class Jugador
     /**
      * Get usuario
      *
-     * @return string 
+     * @return string
      */
     public function getUsuario()
     {
@@ -110,6 +118,7 @@ class Jugador
      * Set posicion
      *
      * @param string $posicion
+     *
      * @return Jugador
      */
     public function setPosicion($posicion)
@@ -122,7 +131,7 @@ class Jugador
     /**
      * Get posicion
      *
-     * @return string 
+     * @return string
      */
     public function getPosicion()
     {
@@ -144,7 +153,7 @@ class Jugador
     {
         $this->equipo = $equipo;
 
-        if($equipo->getPartido() instanceof Partido) {
+        if ($equipo->getPartido() instanceof Partido) {
             $this->setPartido($equipo->getPartido());
         }
     }
@@ -165,24 +174,10 @@ class Jugador
     public function setPartido($partido)
     {
         $this->partido = $partido;
+
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getGoles()
-    {
-        return $this->goles;
-    }
-
-    /**
-     * @param int $goles
-     */
-    public function setGoles($goles)
-    {
-        $this->goles = $goles;
-    }
 
     /**
      * @return int
@@ -201,4 +196,66 @@ class Jugador
     }
 
 
+    /**
+     * Add goles
+     *
+     * @param \AppBundle\Entity\Gol $gol
+     *
+     * @return Jugador
+     */
+    public function addGol(Gol $gol)
+    {
+        $gol->setJugador($this);
+
+        $this->goles[] = $gol;
+
+        return $this;
+    }
+
+    /**
+     * Remove goles
+     *
+     * @param \AppBundle\Entity\Gol $gol
+     */
+    public function removeGol(Gol $gol)
+    {
+        $this->goles->removeElement($gol);
+    }
+
+    /**
+     * Get goles
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getGoles()
+    {
+        return $this->goles;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getGolesAfavorCount()
+    {
+        return $this
+            ->goles
+            ->filter(function (Gol $gol) {
+                return Gol::NORMAl == $gol->getTipo();
+            }
+            )->count();
+    }
+
+    /**
+     * @return int
+     */
+    public function getGolesEnContra()
+    {
+        return $this
+            ->goles
+            ->filter(function (Gol $gol) {
+                return Gol::PROPIA_PUERTA == $gol->getTipo();
+            }
+            )->count();
+    }
 }

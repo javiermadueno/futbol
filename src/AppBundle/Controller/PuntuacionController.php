@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Partido;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -14,7 +15,6 @@ use AppBundle\Form\PuntuacionType;
  * Puntuacion controller.
  *
  * @Route("/partido/{id}/puntuacion")
- * @ParamConverter(name="id", class="AppBundle/Entity/Partido")
  */
 class PuntuacionController extends Controller
 {
@@ -22,26 +22,31 @@ class PuntuacionController extends Controller
      * Lists all Puntuacion entities.
      *
      * @Route("/", name="partido_puntuacion_index")
+     * @ParamConverter(name="id", class="AppBundle\Entity\Partido")
      * @Method("GET")
      */
-    public function indexAction()
+    public function indexAction(Partido $partido)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $puntuacions = $em->getRepository('AppBundle:Puntuacion')->findAll();
+        $puntuacions = $em
+            ->getRepository('AppBundle:Puntuacion')
+            ->findBy(['partido' => $partido]);
 
         return $this->render('puntuacion/index.html.twig', array(
             'puntuacions' => $puntuacions,
-        ));
+            'partido' => $partido,
+         ));
     }
 
     /**
      * Creates a new Puntuacion entity.
      *
      * @Route("/new", name="partido_puntuacion_new")
+     * @ParamConverter(name="id", class="AppBundle\Entity\Partido")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction(Request $request, Partido $partido)
     {
         $puntuacion = new Puntuacion();
         $form = $this->createForm('AppBundle\Form\PuntuacionType', $puntuacion);
@@ -57,6 +62,7 @@ class PuntuacionController extends Controller
 
         return $this->render('puntuacion/new.html.twig', array(
             'puntuacion' => $puntuacion,
+            'partido' => $partido,
             'form' => $form->createView(),
         ));
     }
@@ -64,10 +70,12 @@ class PuntuacionController extends Controller
     /**
      * Finds and displays a Puntuacion entity.
      *
-     * @Route("/{id}", name="partido_puntuacion_show")
+     * @Route("/{id_puntuacion}", name="partido_puntuacion_show")
+     * @ParamConverter(name="id", class="AppBundle\Entity\Partido", options={"id" = "id"})
+     * @ParamConverter(name="id_puntuacion", class="AppBundle\Entity\Puntuacion", options={"id" = "id_puntuacion"})
      * @Method("GET")
      */
-    public function showAction(Puntuacion $puntuacion)
+    public function showAction(Partido $partido, Puntuacion $puntuacion)
     {
         $deleteForm = $this->createDeleteForm($puntuacion);
 
@@ -80,10 +88,12 @@ class PuntuacionController extends Controller
     /**
      * Displays a form to edit an existing Puntuacion entity.
      *
-     * @Route("/{id}/edit", name="partido_puntuacion_edit")
+     * @Route("/{id_puntuacion}/edit", name="partido_puntuacion_edit")
+     * @ParamConverter(name="id", class="AppBundle\Entity\Partido", options={"id" = "id"})
+     * @ParamConverter(name="id_puntuacion", class="AppBundle\Entity\Puntuacion", options={"id" = "id_puntuacion"})
      * @Method({"GET", "POST"})
      */
-    public function editAction(Request $request, Puntuacion $puntuacion)
+    public function editAction(Request $request, Partido $partido, Puntuacion $puntuacion)
     {
         $deleteForm = $this->createDeleteForm($puntuacion);
         $editForm = $this->createForm('AppBundle\Form\PuntuacionType', $puntuacion);
@@ -107,10 +117,12 @@ class PuntuacionController extends Controller
     /**
      * Deletes a Puntuacion entity.
      *
-     * @Route("/{id}", name="partido_puntuacion_delete")
+     * @Route("/{id_puntuacion}", name="partido_puntuacion_delete")
+     * @ParamConverter(name="id", class="AppBundle\Entity\Partido", options={"id" = "id"})
+     * @ParamConverter(name="id_puntuacion", class="AppBundle\Entity\Puntuacion", options={"id" = "id_puntuacion"})
      * @Method("DELETE")
      */
-    public function deleteAction(Request $request, Puntuacion $puntuacion)
+    public function deleteAction(Request $request, Partido $partido, Puntuacion $puntuacion)
     {
         $form = $this->createDeleteForm($puntuacion);
         $form->handleRequest($request);

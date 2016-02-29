@@ -4,8 +4,6 @@ namespace AppBundle\Form;
 
 use AppBundle\Repository\UsuarioRepository;
 use AppBundle\Services\ComunidadProvider;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -15,7 +13,7 @@ use AppBundle\Entity\Usuario;
 class JugadorType extends AbstractType
 {
     /**
-     * JugadorType constructor.
+     * @param ComunidadProvider $comunidadProvider
      */
     public function __construct(ComunidadProvider $comunidadProvider)
     {
@@ -54,6 +52,11 @@ class JugadorType extends AbstractType
         $resolver->setDefaults(array(
             'data_class' => 'AppBundle\Entity\Jugador'
         ));
+    }
+
+    public function getName()
+    {
+        return 'jugador';
     }
 
 }

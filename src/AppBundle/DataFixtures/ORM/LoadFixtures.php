@@ -2,8 +2,10 @@
 
 namespace AppBundle\DataFixtures\ORM;
 
+use AppBundle\Entity\Comunidad;
 use AppBundle\Entity\Equipo;
 use AppBundle\Entity\Posicion;
+use AppBundle\Entity\Usuario;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Doctrine\Common\DataFixtures\FixtureInterface;
@@ -18,7 +20,31 @@ class LoadFixtures implements FixtureInterface, ContainerAwareInterface
 
     public function load(ObjectManager $manager)
     {
-        $this->loadPosiciones($manager);
+        $posiciones = $this->loadPosiciones($manager);
+        $comunidad = $this->loadComunidades($manager);
+        $this->loadUsers($manager, $comunidad, $posiciones);
+    }
+
+    /**
+     * @param ObjectManager $manager
+     *
+     * @return Comunidad
+     */
+    private function loadComunidades(ObjectManager $manager)
+    {
+        $comunidad = new Comunidad();
+
+        $comunidad
+            ->setNombre('EL comuniazo')
+            ->setPrivada(false)
+            ->setPassword('1234');
+        ;
+
+        $manager->persist($comunidad);
+        $manager->flush();
+
+        return $comunidad;
+
     }
 
     private function loadPosiciones(ObjectManager $manager)
@@ -56,6 +82,46 @@ class LoadFixtures implements FixtureInterface, ContainerAwareInterface
         $manager->persist($portero);
         $manager->flush();
 
+        return [$delantero, $defensa, $centroCampista, $portero];
+
+    }
+
+    private function loadUsers(ObjectManager $manager, Comunidad $comunidad, $posiciones)
+    {
+        $encoder = $this
+            ->container
+            ->get('security.password_encoder');
+
+
+        $i = 0;
+        while($i < 15){
+            $user = new Usuario();
+            $user
+                ->setNombre('usuario'.$i)
+                ->setApellido1('apellido_usuario'.$i)
+                ->setApellido1('apellido2_usuario'.$i)
+                ->setEmail('usuario'.$i.'@futbol.com')
+
+                ->setIsActive(true)
+                ->setUsername('usuario'.$i)
+                ->setPassword('usuario'.$i)
+                ->setCreatedAt(new \DateTime('now'))
+                ->setPosicion($posiciones[array_rand($posiciones)])
+                ->setRoles(['ROLE_USER'])
+            ;
+
+            $hash = $encoder->encodePassword($user, $user->getPassword());
+
+            $user->setPassword($hash);
+
+            $comunidad->addUsuario($user);
+
+            $manager->persist($user);
+
+            $i++;
+        }
+
+        $manager->flush();
     }
 
     private function loadEquipos(ObjectManager $manager)

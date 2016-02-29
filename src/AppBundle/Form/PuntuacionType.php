@@ -2,6 +2,8 @@
 
 namespace AppBundle\Form;
 
+use AppBundle\Entity\Partido;
+use AppBundle\Entity\Usuario;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,9 +24,14 @@ class PuntuacionType extends AbstractType
             ->add('valoracion')
             ->add('createdAt', 'datetime')
             ->add('updatedAt', 'datetime')
-            ->add('usuario')
-            ->add('partido')
-            ->add('comunidad')
+            ->add('usuario', 'entity', [
+                'class' => Usuario::class,
+                'property' => 'username'
+            ])
+            ->add('partido', 'entity', [
+                'class' => Partido::class,
+                'property' => 'id'
+            ])
         ;
     }
     

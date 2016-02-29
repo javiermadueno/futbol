@@ -25,8 +25,13 @@ class PartidoController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $comunidad = $this->get('app.comunidad.provider')->get();
 
-        $partidos = $em->getRepository('AppBundle:Partido')->findAll();
+        $partidos = $em
+            ->getRepository('AppBundle:Partido')
+            ->findBy([
+                'comunidad' => $comunidad
+            ]);
 
         return $this->render('partido/index.html.twig', array(
             'partidos' => $partidos,

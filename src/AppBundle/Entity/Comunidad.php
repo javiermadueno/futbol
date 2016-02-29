@@ -168,7 +168,7 @@ class Comunidad
      *
      * @param \AppBundle\Entity\Usuario $usuarios
      */
-    public function removeUsuario(\AppBundle\Entity\Usuario $usuarios)
+    public function removeUsuario(Usuario $usuarios)
     {
         $this->usuarios->removeElement($usuarios);
     }

@@ -296,6 +296,7 @@ class Usuario implements UserInterface
     public function setEmail($email)
     {
         $this->email = $email;
+        return $this;
     }
 
 
@@ -314,12 +315,12 @@ class Usuario implements UserInterface
     /**
      * Add comunidades
      *
-     * @param \AppBundle\Entity\Comunidad $comunidades
+     * @param Comunidad $comunidad
      * @return Usuario
      */
-    public function addComunidad(\AppBundle\Entity\Comunidad $comunidades)
+    public function addComunidad(Comunidad $comunidad)
     {
-        $this->comunidades[] = $comunidades;
+        $this->comunidades[] = $comunidad;
 
         return $this;
     }
@@ -329,7 +330,7 @@ class Usuario implements UserInterface
      *
      * @param \AppBundle\Entity\Comunidad $comunidades
      */
-    public function removeComunidad(\AppBundle\Entity\Comunidad $comunidades)
+    public function removeComunidad(Comunidad $comunidades)
     {
         $this->comunidades->removeElement($comunidades);
     }

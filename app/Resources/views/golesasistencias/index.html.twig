@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>GolesAsistencias list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Goles</th>
+                <th>Asistencias</th>
+                <th>Createdat</th>
+                <th>Updatedat</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for golesAsistencia in golesAsistencias %}
+            <tr>
+                <td><a href="{{ path('resultados_show', { 'id': golesAsistencia.id }) }}">{{ golesAsistencia.id }}</a></td>
+                <td>{{ golesAsistencia.goles }}</td>
+                <td>{{ golesAsistencia.asistencias }}</td>
+                <td>{% if golesAsistencia.createdAt %}{{ golesAsistencia.createdAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if golesAsistencia.updatedAt %}{{ golesAsistencia.updatedAt|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('resultados_show', { 'id': golesAsistencia.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('resultados_edit', { 'id': golesAsistencia.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('resultados_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

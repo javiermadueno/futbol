@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Puntuacion creation</h1>
+    <h1>GolesAsistencias creation</h1>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
@@ -10,7 +10,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('partido_puntuacion_index', {'id': partido.id}) }}">Back to the list</a>
+            <a href="{{ path('resultados_index') }}">Back to the list</a>
         </li>
     </ul>
 {% endblock %}
